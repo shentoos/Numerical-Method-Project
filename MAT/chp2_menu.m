@@ -110,6 +110,12 @@ function fixed_point_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to fixed_point_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+	import ch2.fixed_point;
+	import ch2.fixed_point_plotter;
+	import ch2.no_verifier;
+	ch2_fig2('UserData', ...
+		struct('algorithm', @fixed_point, 'verifier', @no_verifier, ...
+		'plotter', @fixed_point_plotter));
 end
 
 % --- Executes on button press in gnr_btn.
@@ -117,6 +123,11 @@ function gnr_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to gnr_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+	import ch2.generalized_newton_raphson;
+	import ch2.no_verifier;
+	ch2_fig3('UserData', ...
+		struct('algorithm', @generalized_newton_raphson, ...
+		'verifier', @no_verifier));
 end
 
 % --- Executes on button press in halley_btn.

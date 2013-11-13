@@ -64,8 +64,7 @@ function ch2_fig1_OpeningFcn(hObject, eventdata, handles, varargin)
 	sp=ScrollPanel();
 	handles.scroll_panel=sp;
 	guidata(hObject, handles);
-	set(sp,'Units', 'pixels');
-	set(sp,'Position', [10 10 300 300]);
+	set(sp,'Units', 'pixels', 'Position', [10 10 300 300]);
 	handles.dummy_axes = axes('parent', handles.scroll_panel.handle, ...
 		'Visible', 'off', 'Tag', 'dummy_axes');
 	guidata(hObject, handles);
@@ -94,13 +93,6 @@ function varargout = ch2_fig1_OutputFcn(hObject, eventdata, handles)
 
 	% Get default command line output from handles structure
 	varargout{1} = handles.output;
-end
-
-% --- Executes during object creation, after setting all properties.
-function eq_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to rng_start_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 end
 
 function eq_input_Callback(hObject, eventdata, handles)
@@ -155,13 +147,6 @@ function rng_start_input_Callback(hObject, eventdata, handles)
 	end
 end
 
-% --- Executes during object creation, after setting all properties.
-function rng_start_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to rng_start_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-end
-
 function rng_end_input_Callback(hObject, eventdata, handles)
 % hObject    handle to rng_end_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -192,13 +177,6 @@ function rng_end_input_Callback(hObject, eventdata, handles)
 	end
 end
 
-% --- Executes during object creation, after setting all properties.
-function rng_end_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to rng_end_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-end
-
 function itr_count_input_Callback(hObject, eventdata, handles)
 % hObject    handle to itr_count_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -218,13 +196,6 @@ function itr_count_input_Callback(hObject, eventdata, handles)
 	catch err
 		setErronous(hObject, handles);
 	end
-end
-
-% --- Executes during object creation, after setting all properties.
-function itr_count_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to itr_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 end
 
 % --- Executes when ch2_fig1 is resized.

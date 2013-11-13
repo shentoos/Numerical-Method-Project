@@ -64,8 +64,7 @@ function ch2_fig2_OpeningFcn(hObject, eventdata, handles, varargin)
 	sp=ScrollPanel();
 	handles.scroll_panel=sp;
 	guidata(hObject, handles);
-	set(sp,'Units', 'pixels');
-	set(sp,'Position', [10 10 300 300]);
+	set(sp,'Units', 'pixels','Position', [10 10 300 300]);
 	handles.dummy_axes = axes('parent', handles.scroll_panel.handle, ...
 		'Visible', 'off', 'Tag', 'dummy_axes');
 	guidata(hObject, handles);
@@ -75,10 +74,10 @@ function ch2_fig2_OpeningFcn(hObject, eventdata, handles, varargin)
 	set(datacursormode, 'Enable', 'off', 'DisplayStyle', 'datatip', ...
 		'SnapToDataVertex', 'on');
 	set(pan, 'Enable', 'off', 'Motion', 'horizontal', 'ActionPostCallback', ...
-		@(obj, event_obj)redraw(handles.axes1, obj, event_obj));
+		@(obj, event_obj)redraw(handles.axes1, obj, event_obj, handles));
 	set(zoom, 'Enable', 'off', 'RightClickAction', 'InverseZoom', ...
 		'ActionPostCallback', ...
-		@(obj, event_obj)redraw(handles.axes1, obj, event_obj));
+		@(obj, event_obj)redraw(handles.axes1, obj, event_obj, handles));
 	
 	global error_count;		% number of erronous user inputs
 	error_count = 0;
@@ -94,13 +93,6 @@ function varargout = ch2_fig2_OutputFcn(hObject, eventdata, handles)
 
 	% Get default command line output from handles structure
 	varargout{1} = handles.output;
-end
-
-% --- Executes during object creation, after setting all properties.
-function eq_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to root_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 end
 
 function eq_input_Callback(hObject, eventdata, handles)
@@ -149,13 +141,6 @@ function root_input_Callback(hObject, eventdata, handles)
 	end
 end
 
-% --- Executes during object creation, after setting all properties.
-function root_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to root_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-end
-
 function itr_count_input_Callback(hObject, eventdata, handles)
 % hObject    handle to itr_count_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -175,13 +160,6 @@ function itr_count_input_Callback(hObject, eventdata, handles)
 	catch err
 		setErronous(hObject, handles);
 	end
-end
-
-% --- Executes during object creation, after setting all properties.
-function itr_count_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to itr_count_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 end
 
 % --- Executes when ch2_fig2 is resized.
@@ -304,7 +282,7 @@ function doStep(hObject, handles, itr_count)
 	for i = 1:itr_count
 		root = compute(algorithm, root);
 		tag = sprintf('x_%d', cur_step - 1);
-		precision = 16;
+		precision = 4;
 		str = [sprintf(' $x_{%d}=$ ', cur_step - 1), ...
 			double2latex(x_i(cur_step - 1), precision)];
 		h = text(10, (cur_step - 1) * 25, str, 'Tag', tag, ...
@@ -319,15 +297,18 @@ function doStep(hObject, handles, itr_count)
 	cla;
 	hold on;
 	x_lim = get(handles.axes1, 'XLim');
-	h = ezplot(equation, root - sum(x_lim)/2 + x_lim);
-	var = symvar(equation);
-	for i = 1:(cur_step - 1)
-		plot(x_i, subs(equation, var(1), x_i), 'o-k');
+	if isfield(struct, 'plotter')
+		plotter = struct.plotter(equation, root - sum(x_lim)/2 + x_lim);
+	else
+		h = ezplot(equation, root - sum(x_lim)/2 + x_lim);
+		set(h, 'Color', 'green', 'LineStyle', '--');
+		plotter = equation;
 	end
-	set(h, 'Color', 'green');
-	set(h, 'LineStyle', '--');
-	plot(root, subs(equation, var(1), root), '*-b');
-	title(['$' latex(simple(equation)) '$'], 'Interpreter', 'latex', ...
+	for i = 1:(cur_step - 1)
+		plot(x_i, subs(plotter, x_i), 'o-k');
+	end
+	plot(root, subs(plotter, root), '*-b');
+	title(['$' latex(simple(plotter)) '$'], 'Interpreter', 'latex', ...
 		'FontSize', 20);
 end
 
@@ -341,24 +322,29 @@ function root = compute(algorithm, root)
 	cur_step = cur_step + 1;
 end
 
-function redraw(axes1, obj, event_obj)
+function redraw(axes1, obj, event_obj, handles)
 	global root;
 	global equation;
 	global x_i;
 	global cur_step
+	struct = get(handles.ch2_fig2, 'UserData');
 	
 	axes(axes1);
 	cla;
 	hold on;
-	var = symvar(equation);
-	for i = 1:cur_step-1
-		plot(x_i, subs(equation, var(1), x_i), 'o-k');
+	x_lim = get(handles.axes1, 'XLim');
+	if isfield(struct, 'plotter')
+		plotter = struct.plotter(equation, x_lim);
+	else
+		h = ezplot(equation, x_lim);
+		set(h, 'Color', 'green', 'LineStyle', '--');
+		plotter = equation;
 	end
-	h = ezplot(equation, get(axes1, 'XLim'));
-	set(h, 'Color', 'green');
-	set(h, 'LineStyle', '--');
-	plot(root, subs(equation, var(1), root), '*-b');
-	title(['$' latex(simple(equation)) '$'], 'Interpreter', 'latex', ...
+	for i = 1:cur_step-1
+		plot(x_i, subs(plotter, x_i), 'o-k');
+	end
+	plot(root, subs(plotter, root), '*-b');
+	title(['$' latex(simple(plotter)) '$'], 'Interpreter', 'latex', ...
 		'FontSize', 20);
 end
 
