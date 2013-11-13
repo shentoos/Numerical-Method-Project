@@ -99,6 +99,17 @@ function chp2_btn_Callback(hObject, eventdata, handles)
 	chp2_menu;
 end
 
+% --- Executes on button press in chp2_btn.
+function chp3_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to chp2_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+	global window_stack;
+	window_stack.push(handles.main_menu);
+	set(handles.main_menu, 'Visible', 'off');
+	chp3_menu;
+end
+
 % --- Executes on button press in chp4_btn.
 function chp4_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to chp4_btn (see GCBO)

@@ -58,13 +58,14 @@ function data_cursor_mode_mnuitm_Callback(hObject, eventdata, handles)
 % hObject    handle to exit_mnuitm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-	if strcmp(get(pan(handles.ch2_fig1), 'Enable'), 'on') || ...
-			strcmp(get(zoom(handles.ch2_fig1), 'Enable'), 'on');
-		datacursormode(handles.ch2_fig1, 'on');
+	figure = gcf;
+	if strcmp(get(pan(figure), 'Enable'), 'on') || ...
+			strcmp(get(zoom(figure), 'Enable'), 'on');
+		datacursormode(figure, 'on');
 	end
 
-	pan(handles.ch2_fig1, 'off');
-	zoom(handles.ch2_fig1, 'off');
+	pan(figure, 'off');
+	zoom(figure, 'off');
 	
 	set(handles.data_cursor_mode_mnuitm, 'Checked', 'on');
 	set(handles.pan_mnuitm, 'Checked', 'off');
@@ -75,13 +76,14 @@ function pan_mnuitm_Callback(hObject, eventdata, handles)
 % hObject    handle to exit_mnuitm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-	if strcmp(get(datacursormode(handles.ch2_fig1), 'Enable'), 'on') || ...
-			strcmp(get(zoom(handles.ch2_fig1), 'Enable'), 'on');
-		pan(handles.ch2_fig1, 'on');
+	figure = gcf;
+	if strcmp(get(datacursormode(figure), 'Enable'), 'on') || ...
+			strcmp(get(zoom(figure), 'Enable'), 'on');
+		pan(figure, 'on');
 	end
 
-	datacursormode(handles.ch2_fig1, 'off');
-	zoom(handles.ch2_fig1, 'off');
+	datacursormode(figure, 'off');
+	zoom(figure, 'off');
 	
 	set(handles.data_cursor_mode_mnuitm, 'Checked', 'off');
 	set(handles.pan_mnuitm, 'Checked', 'on');
@@ -92,13 +94,14 @@ function zoom_mnuitm_Callback(hObject, eventdata, handles)
 % hObject    handle to exit_mnuitm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-	if strcmp(get(datacursormode(handles.ch2_fig1), 'Enable'), 'on') || ...
-			strcmp(get(pan(handles.ch2_fig1), 'Enable'), 'on');
-		zoom(handles.ch2_fig1, 'on');
+	figure = gcf;
+	if strcmp(get(datacursormode(figure), 'Enable'), 'on') || ...
+			strcmp(get(pan(figure), 'Enable'), 'on');
+		zoom(figure, 'on');
 	end
 
-	datacursormode(handles.ch2_fig1, 'off');
-	pan(handles.ch2_fig1, 'off');
+	datacursormode(figure, 'off');
+	pan(figure, 'off');
 	
 	set(handles.data_cursor_mode_mnuitm, 'Checked', 'off');
 	set(handles.pan_mnuitm, 'Checked', 'off');
