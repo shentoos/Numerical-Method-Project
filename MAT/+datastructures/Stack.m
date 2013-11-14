@@ -45,10 +45,14 @@ classdef Stack < handle
 		end
 		
 		function top = top(this)
-			if this.size == 0
-				error('Popping from empty stack');
+			top = this.top_nth(1);
+		end
+		
+		function top_nth = top_nth(this, n)
+			if this.size < n
+				error('Topping from empty stack');
 			end
-			top = this.data{this.size};
+			top_nth = this.data{this.size - n + 1};
 		end
 		
 		function isempty = isempty(this)
