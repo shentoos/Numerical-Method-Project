@@ -293,6 +293,7 @@ classdef ScrollPanel < hgsetget
                         obj.HighlightColor = value;
                     case 'ShadowColor'
                         obj.ShadowColor = value;
+					case 'Parent'
                     otherwise
                         error(['Invalid property ' name]);
                 end

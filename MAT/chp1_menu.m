@@ -245,6 +245,7 @@ function eval_btn_Callback(hObject, eventdata, handles)
 			case 'f'
 				error = abs(child_error(1) * ...
 					subs(diff(sym([pt.token.value, '(x)'])), child_value(1)));
+				value = subs(sym([pt.token.value, '(x)']), child_value(1));
 		end
 		errors(ind) = error;
 		values(ind) = value;
@@ -256,7 +257,7 @@ function eval_btn_Callback(hObject, eventdata, handles)
 	y = y';
 	for j = 1:length(subexpressions)
 		text(x(j,1), y(j,1), ...
-			sprintf('%s=%g+-%g', subexpressions{j}, values(j), errors(j)), ...
+			sprintf('%s=%g \pm %g', subexpressions{j}, values(j), errors(j)), ...
 			'Interpreter', 'latex', 'VerticalAlignment', 'bottom', ...
 			'HorizontalAlignment','center', 'FontSize', 12);
 	end
@@ -326,7 +327,7 @@ function delete_all_var_input(handles)
 	
 	children = allchild(handles.var_scrl_pnl.handle);
 	for i = 1:length(children)
-		clearErronous(children(i));
+		clearErronous(children(i), handles);
 		delete(children(i));
 	end
 end

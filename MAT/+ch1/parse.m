@@ -85,14 +85,18 @@ function tree = parse(tokens)
 end
 
 function p = precedence(op)
-	switch op.value
-		case {'(', ')'}
-			p = 0;
-		case {'+', '-'}
-			p = 1;
-		case {'*', '/', '\'}
-			p = 2;
-		case {'^'}
-			p = 3;
+	if op.type == 'f'
+		p = 5;
+	else
+		switch op.value
+			case {'(', ')'}
+				p = 0;
+			case {'+', '-'}
+				p = 1;
+			case {'*', '/', '\'}
+				p = 2;
+			case {'^'}
+				p = 3;
+		end
 	end
 end
